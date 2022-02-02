@@ -20,7 +20,11 @@ while True :
 
 	if len(lm) != 0 : 
 		length = detector.findDistance(4 , 8 , img , True)[0] 
-		set_volumn(length / 300 * 100)
+		vol_per = length / 350 * 100 
+		set_volumn(vol_per)
+		cv2.rectangle(img , (50 , 100) , (85 , 400) , (0 , 255 , 0) , 3)
+		cv2.rectangle(img , (50 , 400 - int(vol_per / 100 * (400 - 100) )) , (85 , 400) , (0 , 255 , 0) , cv2.FILLED)
+		cv2.putText(img , "Vol : " + str(int(vol_per)) , (50, 450) , cv2.FONT_HERSHEY_COMPLEX , 0.5 , (0 , 0 , 255) , 1)		
 
 	curr_time = time.time()
 	fps = 1 / (curr_time - prev_time) 
