@@ -49,7 +49,11 @@ class handDetector():
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
  
         return lmList
- 
+
+# changing volumn accordingly - only works on linux ! (windows can suck it) 
+from subprocess import call 
+def set_volumn(percentage) : 
+    call(["amixer", "-D", "pulse", "sset", "Master", str(percentage)+"%"])
  
 def main():
     pTime = 0
