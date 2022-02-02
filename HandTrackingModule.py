@@ -66,10 +66,6 @@ class handDetector():
         length = math.hypot(x2 - x1, y2 - y1)
         return length, img, [x1, y1, x2, y2, cx, cy]
 
-# changing volumn accordingly - only works on linux ! (windows can suck it) 
-from subprocess import call 
-def set_volumn(percentage) : 
-    call(["amixer", "-D", "pulse", "sset", "Master", str(percentage)+"%"])
  
 def main():
     pTime = 0
