@@ -8,8 +8,8 @@ Website: https://www.computervision.zone
 import cv2
 import mediapipe as mp
 import time
- 
- 
+import math 
+
 class handDetector():
     def __init__(self, mode=False, maxHands=2, complexity = 1 , detectionCon=0.5, trackCon=0.5):
         self.mode = mode
@@ -37,7 +37,7 @@ class handDetector():
  
     def findPosition(self, img, handNo=0, draw=True):
  
-        lmList = []
+        self.lmList = []
         if self.results.multi_hand_landmarks:
             myHand = self.results.multi_hand_landmarks[handNo]
             for id, lm in enumerate(myHand.landmark):
@@ -45,11 +45,26 @@ class handDetector():
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 # print(id, cx, cy)
-                lmList.append([id, cx, cy])
+                self.lmList.append([id, cx, cy])
                 if draw:
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
  
-        return lmList
+        return self.lmList
+
+    def findDistance(self, p1, p2, img, draw=True):
+
+        x1, y1 = self.lmList[p1][1], self.lmList[p1][2]
+        x2, y2 = self.lmList[p2][1], self.lmList[p2][2]
+        cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+        
+        if draw:
+            cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
+            cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
+            cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+        
+        length = math.hypot(x2 - x1, y2 - y1)
+        return length, img, [x1, y1, x2, y2, cx, cy]
 
 # changing volumn accordingly - only works on linux ! (windows can suck it) 
 from subprocess import call 
@@ -59,7 +74,7 @@ def set_volumn(percentage) :
 def main():
     pTime = 0
     cTime = 0
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     detector = handDetector()
     while True:
         success, img = cap.read()
