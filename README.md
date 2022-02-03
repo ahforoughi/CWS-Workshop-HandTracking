@@ -4,6 +4,7 @@ In this repo we work on hand gesture detection and how to find positions based o
 
 #### Workshop file: [hand.py](https://github.com/ahforoughi/CWS-Workshop-HandTracking/blob/main/hand.py "hand.py")
 How to run:
+
 `pip3 install -r requirements.txt`
 
 `python3 hand.py`
